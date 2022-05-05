@@ -33,8 +33,8 @@ module BSON
     #   1.221311.to_bson
     # @return [ String ] The encoded string.
     # @see http://bsonspec.org/#/specification
-    def to_bson(encoded = ''.force_encoding(BINARY))
-      encoded << [ self ].pack(PACK)
+    def to_bson(buffer = ByteBuffer.new, validating_keys = Config.validating_keys?)
+      buffer.put_bytes([ self ].pack(PACK))
     end
 
     module ClassMethods
@@ -44,7 +44,7 @@ module BSON
       # @return [ BigDecimal ] The decoded BigDecimal.
       # @see http://bsonspec.org/#/specification
       def from_bson(bson)
-        from_bson_double(bson.read(8))
+        from_bson_double(bson.get_bytes(8))
       end
 
       private
