@@ -1,21 +1,47 @@
-# Logstash Plugin
+# Logstash Mongo Plugin [![Gem Version](https://badge.fury.io/rb/logstash-output-mongo.svg)](https://badge.fury.io/rb/logstash-output-mongo)
 
-[![Travis Build Status](https://travis-ci.com/logstash-plugins/logstash-output-mongodb.svg)](https://travis-ci.com/logstash-plugins/logstash-output-mongodb)
+## Changelog
 
-This is a plugin for [Logstash](https://github.com/elastic/logstash).
+See CHANGELOG.md
 
-It is fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want in whatever way.
+## Installation
 
-## Documentation
+- Run `bin/logstash-plugin install logstash-output-mongo` in your logstash installation directory
 
-Logstash provides infrastructure to automatically generate documentation for this plugin. We use the asciidoc format to write documentation so any comments in the source code will be first converted into asciidoc and then into html. All plugin documentation are placed under one [central location](http://www.elastic.co/guide/en/logstash/current/).
+## Configuration options
 
-- For formatting code or config example, you can use the asciidoc `[source,ruby]` directive
-- For more asciidoc formatting tips, see the excellent reference here https://github.com/elastic/docs#asciidoc-guide
+| Option      | Type    | Description                                                                                                                                                                                    | Required?                | Default  |
+|-------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|----------|
+| database    | String  | The database to use.                                                                                                                                                                           | yes                      |          |
+| collection  | String  | The collection to use. This value can use %{foo} values to dynamically select a collection based on data in the event.                                                                         | yes                      |          |
+| uri         | String  | A MongoDB URI to connect to. See [Mongo Connection](http://docs.mongodb.org/manual/reference/connection-string/).                                                                              | yes                      |          |
+| type        | String  | The operation to be executed. `[ insert, upsert, delete or update ]`.                                                                                                                          | no                       | insert   |
+| attributes  | String  | List of attributes to build the `$set` statement.                                                                                                                                              | yes for update or upsert | []       |
+| retry_delay | number  | The number of seconds to wait after failure before retrying.                                                                                                                                   | no                       | 3        |
+| isodate     | boolean | If true, store the @timestamp field in MongoDB as an ISODate type instead of an ISO8601 string. For more information about this, see [Mongo Dates](http://www.mongodb.org/display/DOCS/Dates). | no                       | false    |
+
+## Example configurations
+
+```ruby
+filter {
+  mutate {
+    add_field => { "_id" => "%{user_id}"}
+  }
+}
+mongo {
+    id => "mongo_db_output_id"
+    database => "logstash-output-mongo"
+    collection => "test"
+    uri => "mongodb://127.0.0.1:27017/logstash-output-mongo"
+    codec => "json"
+    type => "upsert"
+    attributes => ["name"]
+}
+```
 
 ## Need Help?
 
-Need help? Try #logstash on freenode IRC or the https://discuss.elastic.co/c/logstash discussion forum.
+Need help? Feel free to contact me.
 
 ## Developing
 
@@ -96,6 +122,12 @@ gem build logstash-output-mongo.gemspec
 # Publish Gem
 gem push logstash-output-mongo-1.0.0.gem
 ```
+
+## Logstash Plugin
+
+This is a plugin for [Logstash](https://github.com/elastic/logstash).
+
+It is fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want in whatever way.
 
 
 ## Contributing
