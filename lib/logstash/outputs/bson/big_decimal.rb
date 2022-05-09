@@ -34,7 +34,7 @@ module BSON
     # @return [ String ] The encoded string.
     # @see http://bsonspec.org/#/specification
     def to_bson(buffer = ByteBuffer.new, validating_keys = Config.validating_keys?)
-      buffer.put_bytes([ self ].pack(PACK))	
+      buffer.put_bytes([ self ].pack(PACK))
     end
 
     module ClassMethods

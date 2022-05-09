@@ -87,6 +87,17 @@ bin/plugin install --no-verify
 ```
 - Start Logstash and proceed to test the plugin
 
+## Publish
+
+```sh
+# Build Gem 
+gem build logstash-output-mongo.gemspec 
+
+# Publish Gem
+gem push logstash-output-mongo-1.0.0.gem
+```
+
+
 ## Contributing
 
 All contributions are welcome: ideas, patches, documentation, bug reports, complaints, and even something you drew up on a napkin.
