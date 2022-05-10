@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name            = 'logstash-output-mongo'
-  s.version         = '1.0.0'
+  s.version         = '1.0.1'
   s.licenses        = ['Apache License (2.0)']
-  s.summary         = "Writes events to MongoDB (insert, update, upsert & delete)"
-  s.description     = "This gem is a Logstash plugin required to be installed on top of the Logstash core pipeline using $LS_HOME/bin/logstash-plugin install gemname. This gem is not a stand-alone program"
+  s.summary         = "MongoDB CRUD Operations (insert, update, upsert & delete)"
+  s.description     = "Logstash plugin. MongoDB CRUD Operations (insert, update, upsert & delete) for logstash. This gem is a fork of the Logstash plugin required to be installed on top of the Logstash core pipeline using $LS_HOME/bin/logstash-plugin install gemname."
   s.authors         = ["Elastic", "@lancha90"]
   s.email           = 'diegomao627@gmail.com'
   s.homepage        = "https://github.com/lancha90/logstash-output-mongo"

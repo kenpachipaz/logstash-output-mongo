@@ -120,7 +120,7 @@ bin/plugin install --no-verify
 gem build logstash-output-mongo.gemspec 
 
 # Publish Gem
-gem push logstash-output-mongo-1.0.0.gem
+gem push logstash-output-mongo-1.0.1.gem
 ```
 
 ## Logstash Plugin

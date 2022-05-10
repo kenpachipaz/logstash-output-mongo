@@ -53,7 +53,7 @@ class LogStash::Outputs::Mongo < LogStash::Outputs::Base
       # {}.merge(other) so we don't taint the event hash innards
       document = {}.merge(event.to_hash)
 
-      @logger.info("Type=[#{@type}] Collection=[#{@collection}] _id=[#{document["_id"]}]")
+      @logger.debug("Type=[#{@type}] Collection=[#{@collection}] _id=[#{document["_id"]}]")
 
       case @type
 
@@ -103,7 +103,10 @@ class LogStash::Outputs::Mongo < LogStash::Outputs::Base
     statement = {}
 
     @attributes.each do |attr|
-      statement[attr] = document[attr]
+        # filter attributes for not null validation
+        if document[attr] != nil
+          statement[attr] = document[attr]
+        end
     end
 
     return statement
