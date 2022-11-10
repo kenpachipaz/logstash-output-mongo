@@ -35,6 +35,8 @@ class LogStash::Outputs::Mongo < LogStash::Outputs::Base
   # Statement, define the statement to be run. If is null insert_one
   config :attributes, :validate => :array, :default => []
 
+  config :set_on_insert, :validate => :array, :default => []
+
   # Mutex used to synchronize access to 'documents'
   @@mutex = Mutex.new
 
@@ -58,16 +60,17 @@ class LogStash::Outputs::Mongo < LogStash::Outputs::Base
       case @type
 
       when "upsert"
-        statement = buildStatement(document)
-
+        statement = buildStatement(document, @attributes)
+        insertStatement = buildStatement(document, @set_on_insert)
+        
         @db[event.sprintf(@collection)].update_one(
           { '_id' => document["_id"]},
-          { '$set' => statement},
+          { '$set' => statement, '$setOnInsert' => insertStatement},
           :upsert => true
         )
 
       when "update"
-        statement = buildStatement(document)
+        statement = buildStatement(document, @attributes)
 
         @db[event.sprintf(@collection)].update_one(
           { '_id' => document["_id"]},
@@ -98,11 +101,11 @@ class LogStash::Outputs::Mongo < LogStash::Outputs::Base
     end
   end
 
-  def buildStatement(document)
+  def buildStatement(document, from)
 
     statement = {}
 
-    @attributes.each do |attr|
+    from.each do |attr|
         # filter attributes for not null validation
         if document[attr] != nil
           statement[attr] = document[attr]
